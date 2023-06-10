@@ -1,0 +1,253 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
+ */
+package javaapplication2;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
+public class JavaApplication2 {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter the number of input numbers: ");
+        int count = 0;
+        boolean isValidInput = false;
+
+        while (!isValidInput) {
+            if (scanner.hasNextInt()) {
+                count = scanner.nextInt();
+                if (count > 0) {
+                    isValidInput = true;
+                } else {
+                    System.out.println("Invalid input! Please enter a number greater than zero.");
+                }
+            } else {
+                System.out.println("Invalid input! Please enter a valid integer.");
+                scanner.next(); // Clear the invalid input
+            }
+        }
+
+        int[] numbers = new int[count];
+
+        System.out.println("=== MINI CALCULATOR ===");
+
+        for (int i = 0; i < numbers.length; i++) {
+            boolean isNumberValid = false;
+            while (!isNumberValid) {
+                System.out.print("Enter number " + (i + 1) + ": ");
+                try {
+                    numbers[i] = scanner.nextInt();
+                    isNumberValid = true;
+                } catch (InputMismatchException e) {
+                    System.out.println("Invalid input! Please enter a valid integer.");
+                    scanner.next(); // Clear the invalid input
+                }
+            }
+        }
+
+        int sum = calculateSum(numbers);
+        int maximum = findMaximum(numbers);
+        int minimum = findMinimum(numbers);
+        int product = calculateProduct(numbers);
+        int difference = calculateDifference(numbers);
+        double quotient = calculateQuotient(numbers);
+
+        writeResultsToCSVOnDesktop(numbers, sum, maximum, minimum, product, difference, quotient);
+
+        System.out.println("=== PILI UG ASA KA MALIPAY ===");
+        System.out.println("1. Calculate Sum");
+        System.out.println("2. Find Maximum");
+        System.out.println("3. Find Minimum");
+        System.out.println("4. Calculate Product");
+        System.out.println("5. Calculate Difference");
+        System.out.println("6. Calculate Quotient");
+        System.out.println("7. Exit");
+        System.out.println("8. Re-enter the number of input numbers");
+
+        int choice;
+        do {
+            System.out.print("Enter your choice (1-8): ");
+            choice = scanner.nextInt();
+
+            switch (choice) {
+                case 1:
+                    System.out.println("Sum: " + sum);
+                    break;
+                case 2:
+                    System.out.println("Maximum: " + maximum);
+                    break;
+                case 3:
+                    System.out.println("Minimum: " + minimum);
+                    break;
+                case 4:
+                    System.out.println("Product: " + product);
+                    break;
+                case 5:
+                    System.out.println("Difference: " + difference);
+                    break;
+                case 6:
+                    System.out.println("Quotient: " + quotient);
+                    break;
+                case 7:
+                    System.out.println("Exiting the program...");
+                    break;
+                case 8:
+                    // Re-enter the number of input numbers
+                    isValidInput = false;
+                    while (!isValidInput) {
+                        System.out.print("Enter the number of input numbers: ");
+                        if (scanner.hasNextInt()) {
+                            count = scanner.nextInt();
+                            if (count > 0) {
+                                isValidInput = true;
+                            } else {
+                                System.out.println("Invalid input! Please enter a number greater than zero.");
+                            }
+                        } else {
+                            System.out.println("Invalid input! Please enter a valid integer.");
+                            scanner.next(); // Clear the invalid input
+                        }
+                    }
+
+                    numbers = new int[count]; // Reset the numbers array
+
+                    System.out.println("=== MINI CALCULATOR ===");
+                    for (int i = 0; i < numbers.length; i++) {
+                        boolean isNumberValid = false;
+                        while (!isNumberValid) {
+                            System.out.print("Enter number " + (i + 1) + ": ");
+                            try {
+                                numbers[i] = scanner.nextInt();
+                                isNumberValid = true;
+                            } catch (InputMismatchException e) {
+                                System.out.println("Invalid input! Please enter a valid integer.");
+                                scanner.next(); // Clear the invalid input
+                            }
+                        }
+                    }
+
+                    sum = calculateSum(numbers);
+                    maximum = findMaximum(numbers);
+                    minimum = findMinimum(numbers);
+                    product = calculateProduct(numbers);
+                    difference = calculateDifference(numbers);
+                    quotient = calculateQuotient(numbers);
+
+                    appendResultsToCSVOnDesktop(numbers, sum, maximum, minimum, product, difference, quotient);
+                    break;
+                default:
+                    System.out.println("Invalid choice! Please try again.");
+            }
+        } while (choice != 7);
+
+        scanner.close();
+    }
+
+    public static int calculateSum(int[] numbers) {
+        int sum = 0;
+        for (int number : numbers) {
+            sum += number;
+        }
+        return sum;
+    }
+
+    public static int findMaximum(int[] numbers) {
+        int maximum = numbers[0];
+        for (int i = 1; i < numbers.length; i++) {
+            if (numbers[i] > maximum) {
+                maximum = numbers[i];
+            }
+        }
+        return maximum;
+    }
+
+    public static int findMinimum(int[] numbers) {
+        int minimum = numbers[0];
+        for (int i = 1; i < numbers.length; i++) {
+            if (numbers[i] < minimum) {
+                minimum = numbers[i];
+            }
+        }
+        return minimum;
+    }
+
+    public static int calculateProduct(int[] numbers) {
+        int product = 1;
+        for (int number : numbers) {
+            product *= number;
+        }
+        return product;
+    }
+
+    public static int calculateDifference(int[] numbers) {
+        int difference = numbers[0];
+        for (int i = 1; i < numbers.length; i++) {
+            difference -= numbers[i];
+        }
+        return difference;
+    }
+
+    public static double calculateQuotient(int[] numbers) {
+        double quotient = (double) numbers[0];
+        for (int i = 1; i < numbers.length; i++) {
+            quotient /= numbers[i];
+        }
+        return quotient;
+    }
+
+    public static void writeResultsToCSVOnDesktop(int[] numbers, int sum, int maximum, int minimum,
+        int product, int difference, double quotient) {
+    String fileName = System.getProperty("user.home") + "/Desktop/CalculatorMiniSystem.csv";
+
+    try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+        writer.write("\nNumbers");
+        writer.newLine();
+
+        for (int number : numbers) {
+            writer.write(number + "");
+            writer.newLine();
+        }
+
+        writer.write("\nSum,Maximum,Minimum,Product,Difference,Quotient");
+        writer.newLine();
+
+        writer.write(sum + "," + maximum + "," + minimum + "," + product + "," + difference + "," + quotient);
+        writer.newLine();
+        System.out.println("Results written to " + fileName + " successfully.");
+    } catch (IOException e) {
+        System.out.println("An error occurred while writing to the CSV file: " + e.getMessage());
+    }
+}
+
+public static void appendResultsToCSVOnDesktop(int[] numbers, int sum, int maximum, int minimum,
+        int product, int difference, double quotient) {
+    String fileName = System.getProperty("user.home") + "/Desktop/CalculatorMiniSystem.csv";
+
+    try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, true))) {
+        writer.newLine();
+        writer.write("Numbers");
+        writer.newLine();
+
+        for (int number : numbers) {
+            writer.write(number + "");
+            writer.newLine();
+        }
+
+        writer.newLine();
+        writer.write("Sum,Maximum,Minimum,Product,Difference,Quotient");
+        writer.newLine();
+
+        writer.write(sum + "," + maximum + "," + minimum + "," + product + "," + difference + "," + quotient);
+        writer.newLine();   
+        System.out.println("Results appended to " + fileName + " successfully.");
+    } catch (IOException e) {
+        System.out.println("An error occurred while appending to the CSV file: " + e.getMessage());
+    }
+}
+
+}
